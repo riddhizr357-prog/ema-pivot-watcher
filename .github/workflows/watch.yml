@@ -3,6 +3,11 @@ on:
   schedule:
     - cron: "*/15 * * * *"
   workflow_dispatch:
+    inputs:
+      test:
+        description: "Send a test Telegram message instead of a normal check"
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency:
@@ -16,7 +21,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python watcher.py
+      - run: python watcher.py ${{ inputs.test && '--test' || '' }}
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
