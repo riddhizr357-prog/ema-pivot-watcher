@@ -24,17 +24,31 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # Alert memory (state.json) lives on its own `state` branch so main stays free of bot commits.
+      - name: Load state
+        run: |
+          git fetch -q origin state:refs/remotes/origin/state || true
+          git show origin/state:state.json > state.json 2>/dev/null || echo '{"sent": []}' > state.json
       - run: python watcher.py ${{ inputs.test && '--test' || '' }}
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Save state
+        if: always()
         run: |
-          if ! git diff --quiet state.json; then
-            git config user.name "watcher-bot"
-            git config user.email "watcher-bot@users.noreply.github.com"
-            git add state.json
-            git commit -m "update state"
-            git pull --rebase -X theirs || true
-            git push
+          cp state.json "$RUNNER_TEMP/state.json"
+          rm -f state.json
+          git config user.name "watcher-bot"
+          git config user.email "watcher-bot@users.noreply.github.com"
+          if git rev-parse -q --verify origin/state >/dev/null; then
+            git checkout -q -B state origin/state
+          else
+            git checkout -q --orphan state
+            git rm -rfq . 
+          fi
+          cp "$RUNNER_TEMP/state.json" state.json
+          git add state.json
+          if ! git diff --cached --quiet; then
+            git commit -q -m "update state"
+            git push -q origin state
           fi
