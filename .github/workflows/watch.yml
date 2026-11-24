@@ -2,9 +2,9 @@ name: EMA9 pivot watch
 on:
   schedule:
     # 05:00-23:00 IST, Mon-Fri. GitHub cron is UTC (IST = UTC+5:30).
-    - cron: "30,45 23 * * 0-4"      # 05:00 and 05:15 IST (Mon-Fri)
-    - cron: "*/15 0-16 * * 1-5"     # 05:30-22:15 IST
-    - cron: "0,15,30 17 * * 1-5"    # 22:30, 22:45, 23:00 IST
+    - cron: "30-55/5 23 * * 0-4"    # 05:00-05:25 IST (Mon-Fri)
+    - cron: "*/5 0-16 * * 1-5"      # 05:30-22:25 IST
+    - cron: "0-30/5 17 * * 1-5"     # 22:30-23:00 IST
   workflow_dispatch:
     inputs:
       test:
