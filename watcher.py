@@ -20,7 +20,7 @@ from zoneinfo import ZoneInfo
 # label -> (Yahoo symbol, session kind, price decimals).
 # "fx" = day rolls at 17:00 New York (like TradingView/OANDA/CME), closed on weekends; "utc" = 24/7 crypto.
 SYMBOLS = {
-    "Gold (GC=F futures)": ("GC=F", "fx", 1),
+    "Gold (Dec 2026 futures)": ("GCZ26.CMX", "fx", 1),  # pinned: GC=F rolled to Feb on 25 Nov (+$28 jump). Dec trades to ~29 Dec; revisit then.
     "Oil WTI (CL=F)":      ("CL=F", "fx", 2),
     "EURUSD":              ("EURUSD=X", "fx", 5),
     "GBPUSD":              ("GBPUSD=X", "fx", 5),
