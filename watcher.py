@@ -155,7 +155,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--test", action="store_true")
-    ap.add_argument("-n", "--lookback", type=int, default=4)
+    ap.add_argument("-n", "--lookback", type=int, default=12)
     args = ap.parse_args()
     if args.test:
         telegram("Watcher test OK. You will get a message here when EMA9 crosses a Fibonacci pivot on the 15m chart.")
